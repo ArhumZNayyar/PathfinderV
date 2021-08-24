@@ -17,6 +17,7 @@ namespace {
 	bool startActive = true;
 	bool endActive = false;
 	bool wallActive = false;
+	bool removeActive = false;
 	bool showNotice = false;
 	bool idle = true;
 
@@ -79,6 +80,9 @@ void PathfinderV::pathFinder()
 			else if (endActive && !wallActive) {
 				map->createDestination(mouseY / globals::tileExtent, mouseX / globals::tileExtent);
 			}
+			else if (removeActive && !startActive && !endActive && !wallActive) {
+				map->removeWall(mouseY / globals::tileExtent, mouseX / globals::tileExtent);
+			}
 		}
 
 		else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -92,7 +96,7 @@ void PathfinderV::pathFinder()
 					// Check if walling is active
 					if (wallActive)
 						map->createWall(mouseY / globals::tileExtent, mouseX / globals::tileExtent);
-					else if (!wallActive)
+					else if (!wallActive && removeActive)
 						map->removeWall(mouseY / globals::tileExtent, mouseX / globals::tileExtent);
 				}
 			}
@@ -100,6 +104,7 @@ void PathfinderV::pathFinder()
 
 		if (input.wasKeyPressed(SDL_SCANCODE_Q)) {
 			// Set either the start or end point
+			removeActive = false;
 			if (!wallActive) {
 				endActive = false;
 				startActive = !startActive;
@@ -111,6 +116,7 @@ void PathfinderV::pathFinder()
 		}
 
 		else if (input.wasKeyPressed(SDL_SCANCODE_W)) {
+			removeActive = false;
 			if (!wallActive) {
 				startActive = false;
 				endActive = !endActive;
@@ -126,6 +132,7 @@ void PathfinderV::pathFinder()
 			wallActive = !wallActive;
 			startActive = false;
 			endActive = false;
+			removeActive = false;
 		}
 
 		else if (input.wasKeyPressed(SDL_SCANCODE_S)) {
@@ -143,6 +150,13 @@ void PathfinderV::pathFinder()
 		}
 
 		else if (input.wasKeyPressed(SDL_SCANCODE_R)) {
+			wallActive = false;
+			startActive = false;
+			endActive = false;
+			removeActive = !removeActive;
+		}
+
+		else if (input.wasKeyPressed(SDL_SCANCODE_C)) {
 			// Clear the grid
 			map->clearMap();
 		}
@@ -179,6 +193,8 @@ void PathfinderV::draw(Graphics & graphics)
 		text->drawText(graphics, 625, 50, ">>Selection: Destination", 20, SDL_Color{ 255, 255, 255, 255 });
 	else if (wallActive)
 		text->drawText(graphics, 625, 50, ">>Selection: Walls", 20, SDL_Color{ 255, 255, 255, 255 });
+	else if (removeActive)
+		text->drawText(graphics, 625, 50, ">>Selection: Remove Walls", 20, SDL_Color{ 255, 255, 255, 255 });
 	else
 		text->drawText(graphics, 625, 50, ">>Selection: NONE", 20, SDL_Color{ 255, 255, 255, 255 });
 	if (showNotice) {
@@ -209,9 +225,10 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 230, "[Q] = Set starting point", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 255, "[W] = Set destination point", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 280, "[E] = Create walls", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 305, "[R] = Reset map", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 305, "[R] = Remove walls", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 330, "[S] = Solve map", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 355, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 355, "[C] = Clear map", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 380, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
 	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
 	text->drawText(graphics, 625, 600, "BUILD VER: 2.0.1.4", 20, SDL_Color{ 255, 255, 255, 255 });
@@ -227,7 +244,7 @@ void PathfinderV::update(Graphics &graphics, float elapsedTime)
 			idle = false;
 		}
 		else if (this->resolveMap && !idle) {
-			text->drawText(graphics, 625, 135, ">>Status: Searching...", 20, SDL_Color{ 255,255,255,255 });
+			text->drawText(graphics, 625, 150, ">>Status: Searching...", 20, SDL_Color{ 255,255,255,255 });
 			start = std::chrono::system_clock::now();
 			map->resetMap();
 			if (algo->findSolution(graphics)) {
