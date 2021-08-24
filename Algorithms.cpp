@@ -27,7 +27,7 @@ void Algorithms::createPath(Graphics &graphics)
 		presentNode->colorTransitions = false;
 		this->map.draw(graphics);
 		SDL_RenderPresent(graphics.getRenderer());
-		SDL_Delay(globals::maxFrameTime);
+		SDL_Delay(8);
 		pathNodes.pop();
 	}
 }
@@ -47,8 +47,16 @@ bool AStar::findSolution(Graphics &graphics)
 	this->startPoint->known = true;
 	// Once the data is populated insert into the vector
 	tileNodes.push_back(startPoint);
-
+	int timeToUpdate = 10;
+	int timer = 0;
+	int lastUpdateTimeMS = SDL_GetTicks();
+	SDL_Event event;
 	while (!tileNodes.empty()) {
+		if (SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT) {
+				break;
+			}
+		}
 		// lambda function to sort the vector by its costs
 		std::sort(tileNodes.begin(), tileNodes.end(), [](const Tile::Node* previousNode, const Tile::Node* nextNode) 
 			{ return previousNode->finalCost > nextNode->finalCost; });
@@ -57,8 +65,15 @@ bool AStar::findSolution(Graphics &graphics)
 
 		this->map.draw(graphics);
 		SDL_RenderPresent(graphics.getRenderer());
-		SDL_Delay(globals::maxFrameTime);
+		while (timer < timeToUpdate) {
+			const int currentTimeMS = SDL_GetTicks();
+			int elapsedTimeMS = currentTimeMS - lastUpdateTimeMS;
+			elapsedTimeMS = std::min(elapsedTimeMS, globals::maxFrameTime);
+			lastUpdateTimeMS = currentTimeMS;
 
+			timer += elapsedTimeMS;
+		}
+		timer = 0;
 		for (auto& adjacentNode : presentNode->adjacentNodes) {
 			if (!adjacentNode->obstructed) {
 				if (adjacentNode->known) {
