@@ -8,13 +8,13 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <chrono>
+#include <ctime>
 #include "Graphics.h"
 #include "Input.h"
 #include "Map.h"
 #include "Algorithms.h"
 #include "Text.h"
-#include <chrono>
-#include <ctime>
 
 class PathfinderV
 {
