@@ -8,6 +8,8 @@
 
 namespace {
 	/* Application Data */
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+
 	SDL_Color gridBG = { 22, 22, 22, 255 }; // Light black
 	SDL_bool activeMouse = SDL_FALSE;
 	SDL_bool mouseHover = SDL_FALSE;
@@ -15,8 +17,13 @@ namespace {
 	bool startActive = true;
 	bool endActive = false;
 	bool wallActive = false;
+	bool showNotice = false;
 
 	std::string algoName = "NOT SET";
+	double algoTime = 0;
+
+	int noticeTimer = 4000;
+	int textDuration = 0;
 }
 
 PathfinderV::PathfinderV()
@@ -139,15 +146,34 @@ void PathfinderV::pathFinder()
 		//	startRect.x -= gridSize;
 		//}
 
-		if (input.wasKeyPressed(SDL_SCANCODE_E)) {
+		if (input.wasKeyPressed(SDL_SCANCODE_Q)) {
 			// Set either the start or end point
-			startActive = !startActive;
-			endActive = !endActive;
+			if (!wallActive) {
+				endActive = false;
+				startActive = !startActive;
+			}
+			else {
+				textDuration = 0;
+				showNotice = true;
+			}
 		}
 
-		else if (input.wasKeyPressed(SDL_SCANCODE_R)) {
+		else if (input.wasKeyPressed(SDL_SCANCODE_W)) {
+			if (!wallActive) {
+				startActive = false;
+				endActive = !endActive;
+			}
+			else {
+				textDuration = 0;
+				showNotice = true;
+			}
+		}
+
+		else if (input.wasKeyPressed(SDL_SCANCODE_E)) {
 			// Create walls
 			wallActive = !wallActive;
+			startActive = false;
+			endActive = false;
 		}
 
 		else if (input.wasKeyPressed(SDL_SCANCODE_S)) {
@@ -173,6 +199,13 @@ void PathfinderV::pathFinder()
 		int elapsedTimeMS = currentTimeMS - lastUpdateTimeMS;
 		this->update(graphics, std::min(elapsedTimeMS, globals::maxFrameTime));
 		lastUpdateTimeMS = currentTimeMS;
+
+		if (showNotice) {
+			textDuration += std::min(elapsedTimeMS, globals::maxFrameTime);
+			if (textDuration >= noticeTimer)
+				showNotice = false;
+		}
+
 		// draw after update is finished
 		this->draw(graphics);
 	}
@@ -185,7 +218,36 @@ void PathfinderV::draw(Graphics & graphics)
 	graphics.clearAll();
 	// Do any drawings
 	map->draw(graphics);
-	text->drawText(graphics, 625, 5, "Algorithm: " + algoName);
+	text->drawText(graphics, 625, 5, ">>Algorithm: " + algoName, 20, SDL_Color{ 255, 255, 255, 255 });
+	if (startActive)
+		text->drawText(graphics, 625, 25, ">>Selection: Start Point", 20, SDL_Color{ 255, 255, 255, 255 });
+	else if (endActive)
+		text->drawText(graphics, 625, 25, ">>Selection: Destination", 20, SDL_Color{ 255, 255, 255, 255 });
+	else if (wallActive)
+		text->drawText(graphics, 625, 25, ">>Selection: Walls", 20, SDL_Color{ 255, 255, 255, 255 });
+	else
+		text->drawText(graphics, 625, 25, ">>Selection: NONE", 20, SDL_Color{ 255, 255, 255, 255 });
+	if (showNotice) {
+		text->drawText(graphics, 125, 220, "Disable Wall creation first!", 40, SDL_Color{ 255, 255, 255, 255 });
+	}
+	if (map->getStartingPoint() != nullptr) {
+		text->drawText(graphics, 625, 45, ">>Start Point: " + std::to_string(map->getStartingPoint()->rowPosition)
+			+ "," + std::to_string(map->getStartingPoint()->columnPosition), 20, SDL_Color{ 255, 255, 255, 255 });
+	}
+	else {
+		text->drawText(graphics, 625, 45, ">>Start Point: ", 20, SDL_Color{ 255, 255, 255, 255 });
+	}
+	if (map->getDestination() != nullptr) {
+		text->drawText(graphics, 625, 65, ">>Destination: " + std::to_string(map->getDestination()->rowPosition)
+			+ "," + std::to_string(map->getDestination()->columnPosition), 20, SDL_Color{ 255, 255, 255, 255 });
+	}
+	else {
+		text->drawText(graphics, 625, 65, ">>Destination: ", 20, SDL_Color{ 255, 255, 255, 255 });
+	}
+	std::string sTime = ">>Search Time: " + std::to_string(algoTime);
+	sTime = sTime.substr(0, sTime.find(".") + 2 + 1);
+	text->drawText(graphics, 625, 85, sTime + " seconds", 20, SDL_Color{ 255, 255, 255, 255 });
+		
 	// Present to screen
 	graphics.renderSurface();
 
@@ -224,10 +286,15 @@ void PathfinderV::update(Graphics &graphics, float elapsedTime)
 {
 	if (map->getStartingPoint() && map->getDestination() && algo) {
 		if (this->resolveMap) {
+			start = std::chrono::system_clock::now();
 			map->resetMap();
 			if (algo->findSolution(graphics)) {
 				algo->createPath(graphics);
 			}
+			end = std::chrono::system_clock::now();
+			std::chrono::duration<double> completionTime = end - start;
+			algoTime = completionTime.count();
+			std::cout << "Time elapsed: " << completionTime.count() << " ms" << std::endl;
 			this->resolveMap = false;
 		}
 	}

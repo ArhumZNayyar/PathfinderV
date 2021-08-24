@@ -13,6 +13,8 @@
 #include "Map.h"
 #include "Algorithms.h"
 #include "Text.h"
+#include <chrono>
+#include <ctime>
 
 class PathfinderV
 {

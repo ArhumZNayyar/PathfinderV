@@ -1,11 +1,11 @@
 #include "Text.h"
 
-void Text::drawText(Graphics & graphics, int x, int y, std::string str, SDL_Color color)
+void Text::drawText(Graphics & graphics, int x, int y, std::string str, int fontSize, SDL_Color color)
 {
 	if (!TTF_WasInit()) { // TTF isn't initialized
 		std::cout << "TTF_Init failed " << TTF_GetError() << std::endl;
 	}
-	TTF_Font *font = TTF_OpenFont("VT323-Regular.ttf", 20);
+	TTF_Font *font = TTF_OpenFont("VT323-Regular.ttf", fontSize);
 	if (!font) { // Unable to load font
 		printf("TTF_OpenFont: %s\n", TTF_GetError());
 	}
