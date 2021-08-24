@@ -237,7 +237,7 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 405, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
 	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
-	text->drawText(graphics, 625, 600, "BUILD VER: 2.0.1.4", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 600, "BUILD VER: 2.1.0.7", 20, SDL_Color{ 255, 255, 255, 255 });
 
 	// Present to screen
 	graphics.renderSurface();
