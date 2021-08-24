@@ -98,55 +98,6 @@ void PathfinderV::pathFinder()
 			}
 		}
 
-		//if (wallActive) {
-		//	bool found = false;
-		//	if (wallList.empty()) {
-		//		wallList.push_back(SDL_Rect{ (event.motion.x / gridSize) * gridSize,
-		//			(event.motion.y / gridSize) * gridSize,
-		//			gridSize,
-		//			gridSize });
-		//	}
-		//	else {
-		//		for (int i = 0; i < wallList.size(); ++i) {
-		//			if (wallList[i].x == (event.motion.x / gridSize) * gridSize
-		//				&& wallList[i].y == (event.motion.y / gridSize) * gridSize) {
-		//				wallList.erase(wallList.begin() + i);
-		//				found = true;
-		//			}
-		//		}
-		//		if (!found) {
-		//			wallList.push_back(SDL_Rect{ (event.motion.x / gridSize) * gridSize,
-		//			(event.motion.y / gridSize) * gridSize,
-		//			gridSize,
-		//			gridSize });
-		//		}
-		//	}
-		//}
-		//else if (startActive) {
-		//	startRect.x = (event.motion.x / gridSize) * gridSize;
-		//	startRect.y = (event.motion.y / gridSize) * gridSize;
-		//}
-		//else if (endActive) {
-		//	endRect.x = (event.motion.x / gridSize) * gridSize;
-		//	endRect.y = (event.motion.y / gridSize) * gridSize;
-		//}
-
-		//if (input.wasKeyPressed(SDL_SCANCODE_UP) == true) {
-		//	startRect.y -= gridSize;
-		//}
-
-		//else if (input.wasKeyPressed(SDL_SCANCODE_DOWN) == true) {
-		//	startRect.y += gridSize;
-		//}
-		//
-		//else if (input.wasKeyPressed(SDL_SCANCODE_RIGHT) == true) {
-		//	startRect.x += gridSize;
-		//}
-
-		//else if (input.wasKeyPressed(SDL_SCANCODE_LEFT) == true) {
-		//	startRect.x -= gridSize;
-		//}
-
 		if (input.wasKeyPressed(SDL_SCANCODE_Q)) {
 			// Set either the start or end point
 			if (!wallActive) {
@@ -261,41 +212,12 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 305, "[R] = Reset map", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 330, "[S] = Solve map", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 355, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
-	
+	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
 	text->drawText(graphics, 625, 600, "BUILD VER: 2.0.1.4", 20, SDL_Color{ 255, 255, 255, 255 });
+
 	// Present to screen
 	graphics.renderSurface();
-
-
-	//graphics.clearAll();
-	//SDL_SetRenderDrawColor(graphics.getRenderer(), gridBG.r, gridBG.g, gridBG.b, gridBG.a);
-	//graphics.clearAll();
-	//SDL_SetRenderDrawColor(graphics.getRenderer(), gridLineColor.r, gridLineColor.g, gridLineColor.b, gridLineColor.a);
-
-	//for (int x = 0; x < 1 + gridWidth * gridSize; x += gridSize) {
-	//	SDL_RenderDrawLine(graphics.getRenderer(), x, 0, x, windowWidth);
-	//}
-
-	//for (int y = 0; y < 1 + gridHeight * gridSize; y += gridSize) {
-	//	SDL_RenderDrawLine(graphics.getRenderer(), 0, y, windowHeight, y);
-	//}
-
-	//SDL_SetRenderDrawColor(graphics.getRenderer(), startRectColor.r, startRectColor.g, startRectColor.b, startRectColor.a);
-	//SDL_RenderFillRect(graphics.getRenderer(), &startRect);
-	//SDL_SetRenderDrawColor(graphics.getRenderer(), endRectColor.r, endRectColor.g, endRectColor.b, endRectColor.a);
-	//SDL_RenderFillRect(graphics.getRenderer(), &endRect);
-
-	//if (!wallList.empty()) {
-	//	SDL_SetRenderDrawColor(graphics.getRenderer(), wallRectColor.r, wallRectColor.g, wallRectColor.b, wallRectColor.a);
-	//	for (int i = 0; i < wallList.size(); i++) {
-	//		SDL_RenderFillRect(graphics.getRenderer(), &wallList[i]);
-	//	}
-	//}
-
-	//graphics.renderSurface();
-
-	//std::cout << "Cursor x/y = " << startRect.x << "," << startRect.y << std::endl;
 }
 
 void PathfinderV::update(Graphics &graphics, float elapsedTime)
