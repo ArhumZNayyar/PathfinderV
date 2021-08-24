@@ -7,52 +7,23 @@
 #include "PathfinderV.h"
 
 namespace {
-	int gridSize = 30;
-	int gridWidth = 28;
-	int gridHeight = 28;
-
-	int windowWidth = (gridWidth * gridSize) + 1;
-	int windowHeight = (gridHeight * gridSize) + 1;
-
-	SDL_Rect startRect = {
-		startRect.x = (gridWidth - 10) / 2 * gridSize,
-		startRect.y = (gridHeight - 10) / 2 * gridSize,
-		startRect.w = gridSize, 
-		startRect.h = gridSize
-	};
-
-	SDL_Rect endRect = {
-		endRect.x = (gridWidth + 10) / 2 * gridSize,
-		endRect.y = (gridHeight + 10) / 2 * gridSize,
-		endRect.w = gridSize,
-		endRect.h = gridSize
-	};
-
-	std::vector<SDL_Rect> wallList;
-
-	SDL_Rect gridCursorTrans = { startRect.x, startRect.y, gridSize, gridSize };
-
-	// Dark
+	/* Application Data */
 	SDL_Color gridBG = { 22, 22, 22, 255 }; // Light black
-	SDL_Color gridLineColor = { 44, 44, 44, 255 }; // Dark Grey
-	SDL_Color startRectColor = { 255, 255, 255, 255 }; // White
-	SDL_Color endRectColor = { 255, 0, 0, 255 };
-	SDL_Color wallRectColor = { 0, 0, 255, 255 };
-
-	SDL_Color gridCursorTransColor = { 44, 44, 44, 255 };
-
 	SDL_bool activeMouse = SDL_FALSE;
 	SDL_bool mouseHover = SDL_FALSE;
 
 	bool startActive = true;
 	bool endActive = false;
 	bool wallActive = false;
+
+	std::string algoName = "NOT SET";
 }
 
 PathfinderV::PathfinderV()
 {
 	std::cout << "PathfinderV: Intializing..." << std::endl;
 	SDL_Init(SDL_INIT_EVERYTHING);
+	TTF_Init();
 	map = new Map();
 	this->pathFinder();
 }
@@ -190,6 +161,7 @@ void PathfinderV::pathFinder()
 			// Set to A-Star algorithm
 			delete algo;
 			algo = new AStar(*map);
+			algoName = "A* Search";
 		}
 
 		else if (input.wasKeyPressed(SDL_SCANCODE_C)) {
@@ -213,6 +185,7 @@ void PathfinderV::draw(Graphics & graphics)
 	graphics.clearAll();
 	// Do any drawings
 	map->draw(graphics);
+	text->drawText(graphics, 625, 5, "Algorithm: " + algoName);
 	// Present to screen
 	graphics.renderSurface();
 

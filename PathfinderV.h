@@ -12,6 +12,7 @@
 #include "Input.h"
 #include "Map.h"
 #include "Algorithms.h"
+#include "Text.h"
 
 class PathfinderV
 {
@@ -26,6 +27,7 @@ public:
 private:
 	Map* map;
 	Algorithms* algo;
+	Text* text;
 	bool resolveMap = false;
 	bool isSolvable() 
 	{ 
