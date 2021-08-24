@@ -7,6 +7,7 @@
 #pragma once
 #include "Tile.h"
 #include <SDL.h>
+#include <random> // Seed generation
 class Map {
 public:
 	Map();
@@ -20,6 +21,7 @@ public:
 	void createDestination(int row, int column);
 	void createWall(int row, int column);
 	void removeWall(int row, int column);
+	void createMaze(Graphics &graphics, int row, int column, int width, int height);
 	// Clear the map except any created walls
 	void resetMap();
 	// Clear the entire map including any created walls

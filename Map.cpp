@@ -117,6 +117,52 @@ void Map::removeWall(int row, int pos) {
 	}
 }
 
+void Map::createMaze(Graphics & graphics, int row, int column, int width, int height)
+{
+	std::random_device rd;
+	// Mersenne twister engine
+	std::mt19937 mersenne(rd());
+	bool verticalDivision = false;
+	if (width < 2 || height < 2) { return; }
+	std::uniform_real_distribution<double> dist(1.0, 100.0);
+	if (dist(mersenne) < 65.00) {
+		verticalDivision = true;
+	}
+	if (verticalDivision) {
+		int createColumn, removeRow;
+		std::uniform_real_distribution<double> vd(1, INT_MAX);
+		createColumn = 2 * ((int)vd(mersenne) % (width / 2)) + 1 + column;
+		removeRow = 2 * ((int)vd(mersenne) % (1 + height / 2)) + row;
+
+		for (int wall = row; wall < row + height; wall++) {
+			this->createWall(wall, createColumn);
+			this->draw(graphics);
+
+			SDL_RenderPresent(graphics.getRenderer());
+			SDL_Delay(globals::maxFrameTime - 10);
+		}
+		this->removeWall(removeRow, createColumn);
+		this->createMaze(graphics, row, column, createColumn - column, height);
+		this->createMaze(graphics, row, createColumn + 1, width - (createColumn - column + 1), height);
+	}
+	else {
+		int createRow, removeColumn;
+		std::uniform_real_distribution<double> vd(1, INT_MAX);
+		createRow = 2 * ((int)vd(mersenne) % (height / 2)) + 1 + row;
+		removeColumn = 2 * ((int)vd(mersenne) % (1 + width / 2)) + column;
+		for (int wall = column; wall < column + width; wall++) {
+			this->createWall(createRow, wall);
+			this->draw(graphics);
+
+			SDL_RenderPresent(graphics.getRenderer());
+			SDL_Delay(globals::maxFrameTime - 10);
+		}
+		this->removeWall(createRow, removeColumn);
+		this->createMaze(graphics, row, column, width, createRow - row);
+		this->createMaze(graphics, createRow + 1, column, width, height - (createRow - row + 1));
+	}
+}
+
 void Map::resetMap() {
 	this->startPoint->parentNode = nullptr;
 	this->destination->parentNode = nullptr;

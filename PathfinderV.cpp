@@ -161,6 +161,11 @@ void PathfinderV::pathFinder()
 			map->clearMap();
 		}
 
+		else if (input.wasKeyPressed(SDL_SCANCODE_M)) {
+			map->clearMap();
+			map->createMaze(graphics, 0, 0, globals::maxRows, globals::maxColumns);
+		}
+
 		const int currentTimeMS = SDL_GetTicks();
 		int elapsedTimeMS = currentTimeMS - lastUpdateTimeMS;
 		this->update(graphics, std::min(elapsedTimeMS, globals::maxFrameTime));
@@ -228,7 +233,8 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 305, "[R] = Remove walls", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 330, "[S] = Solve map", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 355, "[C] = Clear map", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 380, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 380, "[M] = Generate Maze", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 405, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
 	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
 	text->drawText(graphics, 625, 600, "BUILD VER: 2.0.1.4", 20, SDL_Color{ 255, 255, 255, 255 });
