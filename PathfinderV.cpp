@@ -83,6 +83,9 @@ void PathfinderV::pathFinder()
 			else if (removeActive && !startActive && !endActive && !wallActive) {
 				map->removeWall(mouseY / globals::tileExtent, mouseX / globals::tileExtent);
 			}
+			else if (wallActive && !removeActive && !startActive && !endActive) {
+				map->createWall(mouseY / globals::tileExtent, mouseX / globals::tileExtent);
+			}
 		}
 
 		else if (event.type == SDL_MOUSEBUTTONUP) {
