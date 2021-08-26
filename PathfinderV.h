@@ -35,7 +35,7 @@ private:
 	{ 
 	bool ready; 
 	return (ready = map->getDestination() && map->getStartingPoint()) 
-		? (true) : (std::cout << "Failed to solve", false);
+		? (true) : (std::cout << "Failed to solve. Missing algorithm or start/destination points?\n", false);
 	}
 };
 
