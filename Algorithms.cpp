@@ -25,6 +25,7 @@ void Algorithms::createPath(Graphics &graphics)
 		presentNode = pathNodes.top();
 		presentNode->alterColor(this->pathColor);
 		presentNode->colorTransitions = false;
+		presentNode->pathTile = true;
 		this->map.draw(graphics);
 		SDL_RenderPresent(graphics.getRenderer());
 		SDL_Delay(8);

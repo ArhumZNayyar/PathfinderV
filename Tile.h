@@ -31,8 +31,14 @@ public:
 		float heuristicCost; // Estimated guess to move from the given node to the destination.
 		float finalCost; // Sum of both costs. Used to determine which node to pick to travese (shortest path).
 
+		bool operator !=(const Tile::Node* a) const {
+			if (this->columnPosition == a->columnPosition && this->rowPosition == a->rowPosition)
+				return false;
+			return true;
+		}
 		bool known; // Check if the node is already known (has been traversed to).
 		bool obstructed; // Check if there is an obstruction at this node.
+		bool pathTile;
 		bool colorTransitions;
 
 		Node* parentNode;

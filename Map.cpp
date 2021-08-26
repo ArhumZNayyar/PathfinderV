@@ -117,6 +117,36 @@ void Map::removeWall(int row, int pos) {
 	}
 }
 
+void Map::toggleKnownTile()
+{
+	this->showKnownTiles = !this->showKnownTiles;
+	if (!this->showKnownTiles) {
+		for (int row = 0; row < globals::maxRows; row++) {
+			for (int column = 0; column < globals::maxColumns; column++) {
+				Tile::Node& presentNode = getResidingNode(row, column);
+
+				if (presentNode.known && !presentNode.pathTile && &presentNode != this->destination
+					&& &presentNode != this->startPoint) {
+					presentNode.alterColor(this->defaultColor);
+					presentNode.colorTransitions = false;
+				}
+			}
+		}
+	}
+	else {
+		for (int row = 0; row < globals::maxRows; row++) {
+			for (int column = 0; column < globals::maxColumns; column++) {
+				Tile::Node& presentNode = getResidingNode(row, column);
+
+				if (presentNode.known && !presentNode.pathTile && &presentNode != this->destination
+					&& &presentNode != this->startPoint) {
+					presentNode.alterColor(presentNode.finalKnownTileColor);
+				}
+			}
+		}
+	}
+}
+
 void Map::createMaze(Graphics & graphics, int row, int column, int width, int height)
 {
 	std::random_device rd;
@@ -178,6 +208,7 @@ void Map::resetMap() {
 			if (!presentNode.obstructed && &presentNode != this->startPoint && &presentNode != this->destination) {
 				presentNode.known = false;
 				presentNode.parentNode = nullptr;
+				presentNode.pathTile = false;
 				presentNode.alterColor(this->defaultColor);
 				presentNode.colorTransitions = false;
 			}
@@ -190,6 +221,7 @@ void Map::clearMap() {
 		for (int column = 0; column < globals::maxColumns; column++) {
 			Tile::Node& presentNode = getResidingNode(row, column);
 
+			presentNode.pathTile = false;
 			presentNode.known = false;
 			presentNode.obstructed = false;
 			presentNode.alterColor(this->defaultColor);

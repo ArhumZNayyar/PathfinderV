@@ -21,6 +21,7 @@ public:
 	void createDestination(int row, int column);
 	void createWall(int row, int column);
 	void removeWall(int row, int column);
+	void toggleKnownTile();
 	void createMaze(Graphics &graphics, int row, int column, int width, int height);
 	// Clear the map except any created walls
 	void resetMap();
@@ -35,6 +36,7 @@ private:
 	SDL_Color destinationColor = { 161, 6, 6, 255 };
 	SDL_Color wallColor = { 6, 104, 161, 255 };
 	
-	bool hasStartingPoint = false, hasDestination = false;
+	bool hasStartingPoint = false, hasDestination = false,
+		showKnownTiles = true;
 };
 

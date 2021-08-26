@@ -151,6 +151,10 @@ void PathfinderV::pathFinder()
 			map->clearMap();
 			map->createMaze(graphics, 0, 0, globals::maxRows, globals::maxColumns);
 		}
+		
+		else if (input.wasKeyPressed(SDL_SCANCODE_K)) {
+			map->toggleKnownTile();
+		}
 
 		else if (input.wasKeyPressed(SDL_SCANCODE_S)) {
 			// Solve the map
@@ -246,10 +250,11 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 305, "[R] = Remove walls", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 330, "[S] = Solve map", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 355, "[C] = Clear map", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 380, "[M] = Generate Maze", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 405, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 430, "[2] = Dijkstra's Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
-	text->drawText(graphics, 625, 455, "[3] = ? Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 380, "[K] = Toggle known tiles", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 405, "[M] = Generate Maze", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 430, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 455, "[2] = Dijkstra's Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 480, "[3] = ? Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
 	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
 	text->drawText(graphics, 625, 600, "BUILD VER: 2.1.0.7", 20, SDL_Color{ 255, 255, 255, 255 });
