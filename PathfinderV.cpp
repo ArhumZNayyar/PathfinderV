@@ -135,20 +135,6 @@ void PathfinderV::pathFinder()
 			removeActive = false;
 		}
 
-		else if (input.wasKeyPressed(SDL_SCANCODE_S)) {
-			// Solve the map
-			if (this->isSolvable()) {
-				this->resolveMap = true;
-			}
-		}
-
-		else if (input.wasKeyPressed(SDL_SCANCODE_1)) {
-			// Set to A-Star algorithm
-			delete algo;
-			algo = new AStar(*map);
-			algoName = "A* Search";
-		}
-
 		else if (input.wasKeyPressed(SDL_SCANCODE_R)) {
 			wallActive = false;
 			startActive = false;
@@ -164,6 +150,33 @@ void PathfinderV::pathFinder()
 		else if (input.wasKeyPressed(SDL_SCANCODE_M)) {
 			map->clearMap();
 			map->createMaze(graphics, 0, 0, globals::maxRows, globals::maxColumns);
+		}
+
+		else if (input.wasKeyPressed(SDL_SCANCODE_S)) {
+			// Solve the map
+			if (this->isSolvable()) {
+				this->resolveMap = true;
+			}
+		}
+
+		else if (input.wasKeyPressed(SDL_SCANCODE_1)) {
+			// Set to A-Star algorithm
+			delete algo;
+			algo = new AStar(*map);
+			algoName = "A* Search";
+		}
+
+		else if (input.wasKeyPressed(SDL_SCANCODE_2)) {
+			// Set to Dijkstra's algorithm
+			delete algo;
+			algo = new Dijkstra(*map);
+			algoName = "Dijkstra Algorithm";
+		}
+
+		else if (input.wasKeyPressed(SDL_SCANCODE_3)) {
+			delete algo;
+			algo = new Column(*map);
+			algoName = "Bruh Algorithm";
 		}
 
 		const int currentTimeMS = SDL_GetTicks();
@@ -235,6 +248,8 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 355, "[C] = Clear map", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 380, "[M] = Generate Maze", 20, SDL_Color{ 255, 255, 255, 255 });
 	text->drawText(graphics, 625, 405, "[1] = A* Search Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 430, "[2] = Dijkstra's Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 455, "[3] = ? Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
 	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
 	text->drawText(graphics, 625, 600, "BUILD VER: 2.1.0.7", 20, SDL_Color{ 255, 255, 255, 255 });

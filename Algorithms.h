@@ -10,6 +10,10 @@
 #include <cmath>
 #include <stack>
 #include <vector>
+#include <set>
+#include <tuple>
+#include <queue>
+
 class Algorithms
 {
 public:
@@ -33,5 +37,27 @@ protected:
 class AStar : public Algorithms {
 public:
 	AStar(Map& map);
-	bool findSolution(Graphics &graphics) override;
+	bool findSolution(Graphics &graphics);
+};
+
+class Dijkstra : public Algorithms {
+public:
+	struct nodeCmp {
+		bool operator () (const Tile::Node* a, const Tile::Node* b) const {
+			return a->movementCost > b->movementCost;
+		}
+	};
+	Dijkstra(Map& map);
+	bool findSolution(Graphics &graphics);
+};
+
+class Column : public Algorithms {
+public:
+	struct setSort {
+		bool operator () (const Tile::Node* leftSide, const Tile::Node* rightSide) const {
+			return leftSide->movementCost > rightSide->movementCost;
+		}
+	};
+	Column(Map& map);
+	bool findSolution(Graphics &graphics);
 };
