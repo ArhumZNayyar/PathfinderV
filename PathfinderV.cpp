@@ -265,7 +265,7 @@ void PathfinderV::draw(Graphics & graphics)
 	text->drawText(graphics, 625, 505, "[3] = Rum Algorithm", 20, SDL_Color{ 255, 255, 255, 255 });
 	// Build Version & Developer
 	text->drawText(graphics, 625, 580, "Developed by Arhum Z. Nayyar", 20, SDL_Color{ 255,255,255,255 });
-	text->drawText(graphics, 625, 600, "BUILD VER: 2.3.1.0", 20, SDL_Color{ 255, 255, 255, 255 });
+	text->drawText(graphics, 625, 600, "BUILD VER: 2.4.0.1", 20, SDL_Color{ 255, 255, 255, 255 });
 
 	// Present to screen
 	graphics.renderSurface();
