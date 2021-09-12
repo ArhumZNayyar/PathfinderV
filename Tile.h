@@ -17,6 +17,7 @@ public:
 		SDL_Rect tile;
 		SDL_Color tileColor = { 255,255,255,255 };
 		SDL_Color finalKnownTileColor = { 166, 44, 232, 255 };
+		SDL_Color pathTileColor = { 237, 199, 47, 255 };
 
 		void createNode(int row, int column);
 		// Set the color to the new color using the SDL_Color struct

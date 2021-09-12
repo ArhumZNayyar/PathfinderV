@@ -147,6 +147,36 @@ void Map::toggleKnownTile()
 	}
 }
 
+void Map::togglePath()
+{
+	this->showPathTiles = !this->showPathTiles;
+	if (!this->showPathTiles) {
+		for (int row = 0; row < globals::maxRows; row++) {
+			for (int column = 0; column < globals::maxColumns; column++) {
+				Tile::Node& presentNode = getResidingNode(row, column);
+
+				if (presentNode.known && presentNode.pathTile && &presentNode != this->destination
+					&& &presentNode != this->startPoint) {
+					presentNode.alterColor(this->defaultColor);
+					presentNode.colorTransitions = false;
+				}
+			}
+		}
+	}
+	else {
+		for (int row = 0; row < globals::maxRows; row++) {
+			for (int column = 0; column < globals::maxColumns; column++) {
+				Tile::Node& presentNode = getResidingNode(row, column);
+
+				if (presentNode.known && presentNode.pathTile && &presentNode != this->destination
+					&& &presentNode != this->startPoint) {
+					presentNode.alterColor(presentNode.pathTileColor);
+				}
+			}
+		}
+	}
+}
+
 void Map::createMaze(Graphics & graphics, int row, int column, int width, int height)
 {
 	std::random_device rd;
